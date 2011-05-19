@@ -7,6 +7,7 @@
 .. seealso::
 
    :title-reference:`Introduction to Information Retrieval`
+
       chapter 2
       chapter 3
       chapter 6
@@ -45,8 +46,41 @@
 正規表現を理解するのに良いWebアプリ
 -----------------------------------
 
+#. RegExr
+
+   正規表現は実際に記述しなければ理解することが難しいので、自分で試してみることが重要でが、毎回毎回Pythonのreモジュールを使って試すのは大変ですし、時間もかかります。
+   
+   RegExrは入力した正規表現の適合箇所を簡単に確認することができるWebアプリケーションです。
+   上のテキストボックスに正規表現を入力すると、下の文書の中でそれにマッチする箇所を表示してくれるので、トライアンドエラーのサイクルが短くすることができます。
+   
+   プログラムを書く前に、意図した通りに表現できているかを確かめる用途にも使うことができます。
+   
+   URL: http://www.gskinner.com/RegExr/
+   
+   .. image:: /images/RegExr.png
+
+#. strfriend
+
+   正規表現は理論的にはオートマトンを用いて説明することができます。
+   
+   strfriendは入力された正規表現を表す非決定性オートマトンを出力してくれるWebアプリケーションです。
+   これを用いて正規表現を可視化することで、複雑で難しい正規表現が理解しやすくなるかも知れません。
+   
+   URL: http://www.strfriend.com/
+   
+   .. image:: /images/strfriend1.png
+   
+   メールアドレスにマッチする正規表現を入力した場合
+   
+   .. image:: /images/strfriend2.png
+
 Pythonでの使用法
 ----------------
+
+.. seealso::
+
+   Python公式ドキュメント
+      `7.2. re - 正規表現操作 <http://www.python.jp/doc/nightly/library/re.html>`_
 
 自然言語処理
 ============
