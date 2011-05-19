@@ -11,6 +11,17 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   introduction
+   getting_started_with_python
+   data_persistence
+   natural_language_processing
+   http_and_html
+   concurrent_programming
+   link_structure_analysis
+   document_indexing
+   machine_learning
+   document_classification
+   evaluation_of_search_results
 
 Indices and tables
 ==================
