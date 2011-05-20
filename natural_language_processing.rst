@@ -84,6 +84,111 @@ Pythonでの使用法
    Python公式ドキュメント
       `7.2. re - 正規表現操作 <http://www.python.jp/doc/nightly/library/re.html>`_
 
+#. マッチするものを全て列挙する場合、findallを使います。::
+
+       >>> import re
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> re.findall('\w+', text)
+       ['python', 'lightweight', 'programming']
+
+   findallはグループにも対応しています。::
+
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> re.findall('(\w+)とは(\w+)', text)
+       [('python', 'lightweight')]
+
+   グループが邪魔な場合は(?:...)の様に、?:をグループの最初につけます。::
+
+      >>> re.findall('(?:\w+)とは(?:\w+)', text)
+      ['python\xe3\x81\xa8\xe3\x81\xaflightweight']
+
+#. マッチ部分に対応するMatchObjectを取得したい場合は、finditerを使います。::
+
+       >>> import re
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> for mo in re.finditer('(\w+)とは(\w+)', text)
+       ...     print mo.group(0)
+       ...     print mo.group(1)
+       ...     print mo.group(2)
+       ...
+       pythonとはlightweight
+       python
+       lightweight
+
+   MatchObjectは名前付きのグループを使った時に特に便利です。次のようにgroupdictを使うことで、グループ名をキーとした辞書が返されます。::
+
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> re.findall('(?P<first>\w+)とは(?P<second>\w+)', text)
+       [('python', 'lightweight')]
+       >>> for mo in re.finditer(pattern, text):
+       ...     print mo.groupdict()
+       ...
+       {'first': 'python', 'second': 'lightweight'}
+
+   例えば日付表現を抽出する場合、次のように名前付きグループを作ることで、マッチした箇所の抽出するプログラムの可読性を高めることができます。::
+
+       >>> pattern = '(?P<year>[1-9]\d{1,3})年(?P<month>1[0-2]|[1-9])月(?P<day>3[01]|[12]\d|[1-9])日'
+       >>> text = '''リリース
+       ... 3.2/ 2011年2月20日
+       ... 2.7.1/ 2010年11月27日
+       ... '''
+       >>> for mo in re.finditer(pattern, text):
+       ...    # mo.group(2)と比べて月を抽出していることが明確になる。
+       ...    print mo.groupdict()['month']
+       ...
+       2
+       11
+
+#. 文字列を先頭から順番に見ていき、正規表現にマッチする最初の箇所が欲しい場合はsearchを使います。searchの返り値はMatchObjectなので、groupdictを利用することができます。::
+
+       >>> import re
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> mo = re.search('l\w+', text)
+       >>> print s.group()
+       lightweight
+
+#. 文字列が先頭から正規表現にマッチしているかを知りたい場合はmatchを使います。::
+
+       >>> import re
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> re.match('l\w+', text) # 先頭はlで始まらない
+       None
+       >>> print re.match('\w+', text).group()
+       python
+
+   逆にmatchを使うと暗黙的に文字列の先頭からを意味することになるので、注意して下さい。
+
+#. 正規表現パターンから正規表現オブジェクトに変換するのは時間のかかる処理です。そのため、繰り返し利用される正規表現パターンはcompileを使うことで、正規表現オブジェクトを再利用することができます。::
+
+       >>> import re
+       >>> regex = re.compile('\w+')  # regexを繰り返し再利用することができる
+       >>> text = 'pythonとはlightweightな、programming言語である'
+       >>> regex.findall(text)
+       ['python', 'lightweight', 'programming']
+
+   ただし、re.match(), re.search(), re.compile()は渡された最後の物がキャッシュとして残るので、正規表現パターンが1種類しかでてこない場合は、compileを利用する必要はありません。
+
+#. 複数行にまたがる文字列に対し、各行の行頭や(各改行の直後)や行末(改行の直前)にマッチさせたい場合、re.MULTILINEオプションを指定した上で、^や$を使います。::
+
+       >>> import re
+       >>> pattern = '^\w+'
+       >>> text = '''python
+       ... パイソン
+       ... ルビー ruby
+       ... perl
+       ... C言語
+       ... '''
+       >>> re.findall(pattern, text, re.MULTILINE)
+       ['python', 'perl', 'C']
+       >>> re.findall(pattern, text, re.M)  # re.MでもOK
+       ['python', 'perl', 'C']
+
+   逆に、re.MULTILINEをつけ忘れると、^と$は文字列の最初と最後にのみマッチするようになります。::
+
+       >>> re.findall('^\w+', text)
+       ['python']
+
+
 自然言語処理
 ============
 
