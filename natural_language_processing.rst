@@ -379,7 +379,17 @@ Pythonでの使用法
 
       databases -> database
 
+ストップワードの除去
+--------------------
 
+与えられた文書の形態素解析を行った後、語の正規化を行いました。これで、文書の単語出現頻度を作ることができます。しかしながら、自然言語処理は多くの文書に共通して現れる単語が多く存在します。例えば、theという単語は多くの文書に現れるため、仮にtheが文書に出現したとしても、その文書を特徴付けるものとはなりません。
+
+このようなほとんど全ての文書に出現する語をストップワードと呼び、正規化して得られた語リストから除去する必要があります。
+
+ストップワードは事前に知識として与えることが可能で、日本語と英語のストップワードは例えばSlothLibプロジェクトからダウンロードすることができます。
+
+* `日本語ストップワード <http://svn.sourceforge.jp/svnroot/slothlib/CSharp/Version1/SlothLib/NLP/Filter/StopWord/word/Japanese.txt>`_
+* `英語ストップワード <http://svn.sourceforge.jp/svnroot/slothlib/CSharp/Version1/SlothLib/NLP/Filter/StopWord/word/English.txt>`_
 
 Pythonでの使用法
 ----------------
