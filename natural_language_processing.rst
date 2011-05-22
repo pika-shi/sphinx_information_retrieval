@@ -298,6 +298,116 @@ Pythonでの使用法
 Pythonでの使用法
 ----------------
 
+#. 形態素解析 MeCab
+
+   MeCab.Taggerクラスのインスタンスを生成し、parseメソッドを呼ぶことで解析結果を文字列として取得できます。::
+
+      >>> import MeCab
+      >>> tagger = MeCab.Tagger('-Ochasen')
+      >>> print tagger.parse('本日は晴天なり')
+      本日	ホンジツ	本日	名詞-副詞可能		
+      は	ハ	は	助詞-係助詞		
+      晴天	セイテン	晴天	名詞-一般		
+      なり	ナリ	なり	助動詞	文語・ナリ	基本形
+      EOS
+
+   parseToNodeメソッドを使うこともできます。parseToNodeメソッドはMeCab.Nodeクラスのインスタンスを返し、nextメソッドでノードをたどることができます。これには文頭、文末形態素というものが含まれているので、これらを無視したい場合は次のように利用します。::
+
+      >>> node = tagger.parseToNode('本日は晴天なり')
+      >>> node = node.next  # 「文頭」を無視
+      >>> while node.next is not None:  # 「文末」のnextがNoneであることを利用して「文末」を無視
+      ...     print node.surface, node.feature
+      ...     node = node.next  # 次に移動
+      ...
+      本日 名詞,副詞可能,*,*,*,*,本日,ホンジツ,ホンジツ,,
+      は 助詞,係助詞,*,*,*,*,は,ハ,ワ,,
+      晴天 名詞,一般,*,*,*,*,晴天,セイテン,セイテン,,
+      なり 助動詞,*,*,*,文語・ナリ,基本形,なり,ナリ,ナリ,,
+
+   次のように書くことで、文章から名詞のみを抽出することができます。::
+
+      >>> node = tagger.parseToNode('本日は晴天なり')
+      >>> node = node.next
+      >>> while node.next is not None:
+      ...     if node.feature.split(',')[0] == '名詞':
+      ...         print node.surface
+      ...     node = node.next
+      ...
+      本日
+      晴天
+
+   .. seealso::
+
+      コンストラクタにはmecabの実行形式に与えるパラメータを文字列として与えることができます。
+      ここではchasen互換モードでMeCabを呼び出しています。詳しくはMeCabのドキュメントを参照してください。
+         `MeCab: Yet Another Part-of-Speech and Morphological Analyzer <http://mecab.sourceforge.net>`_
+
+#. 語の正規化
+
+   英語の大文字・小文字を正規化する場合、次の3つのメソッドを使います。::
+
+      >>> 'PyThOn'.lower()  # 小文字に正規化
+      'python'
+      >>> 'PyThOn'.upper()  # 大文字に正規化
+      'PYTHON'
+      >>> 'PyThOn'.capitalize()  # タイトル文字に正規化
+      'Python'
+
+   ステミング処理には、nltkモジュールのnltk.PorterStemmerやnltk.LancasterStemmerなどを使います。::
+
+      >>> import nltk
+      >>> stemmer = nltk.PorterStemmer()
+      >>> words = ['database', 'databases', 'distribute', 'distribution']
+      >>> [stemmer.stem(word) for word in words]
+      ['databas', 'databas', 'distribut', 'distribut']
+
+   見出し語化を行うには、nltkモジュールのnltk.WordNetLemmatizerを使いますが、この処理は時間がかかるので事前にステミング処理を行うなどして、単語の数を減らすように注意をして下さい。::
+
+      >>> lemmatizer = nltk.WordNetLemmatizer()
+      >>> words = ['women', 'databases']
+      >>> [lemmatizer.lemmatize(word) for word in words]
+      ['woman', 'database']
+
+#. ストップワードの除去
+
+   英語用のストップワードはnltk.corpus.stopwords.words('english')で取得することができます。::
+
+      >>> from nltk.corpus import stopwords
+      >>> len(stopwords.words('english'))
+      127
+      >>> stopwords.words('english')[:10]
+      ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your']
+
+   日本語用のストップワードはnltkには用意されていないので、例えばSlothLibのストップワードを使うことができます。
+      `SlothLib ストップワードリスト <http://svn.sourceforge.jp/svnroot/slothlib/CSharp/Version1/SlothLib/NLP/Filter/StopWord/word/Japanese.txt>`_
+
+#. nltkのその他の機能
+
+   nltk.FreqDistクラスはコンストラクタで単語のリストを受け取り(イテレータでも可)、term frequencyベクトルのように動作するFreqDistインスタンスを生成します。::
+
+      >>> import nltk, MeCab
+      >>> sentence = '''MeCabは 京都大学情報学研究科日本電信電話株式会社
+      ... コミュニケーション科学基礎研究所 共同研究ユニットプロジェクトを
+      ... 通じて開発されたオープンソース 形態素解析エンジンです.
+      ... 言語, 辞書,コーパスに依存しない汎用的な設計を 基本方針としています.
+      ... パラメータの推定に Conditional Random Fields (CRF) を用いており,
+      ... ChaSenが採用している隠れマルコフモデルに比べ性能が向上しています．
+      ... また、平均的にChaSen, Juman, KAKASIより高速に動作します.
+      ... ちなみに和布蕪(めかぶ)は, 作者の好物です.'''
+      >>> tagger = MeCab.Tagger()
+      >>> node = tagger.parseToNode(sentence).next
+      >>> words = []
+      >>> while node.next is not None:
+      ...     if node.feature.split(',')[0] == '名詞':
+      ...         words.append(node.surface.lower())
+      ...     node = node.next
+      ...
+      >>> fdist = nltk.FreqDist(words)
+      >>> fdist['chasen'] # sentenceの中でchasenという名詞が現れた回数
+      2
+      >>> fdist.freq('chasen') # sentenceの中でのchasenの相対的な頻度
+      0.0392156862745
+
 課題
 ====
 
