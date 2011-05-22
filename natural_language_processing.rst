@@ -345,6 +345,36 @@ Pythonでの使用法
    品詞のことは英語で Part-of-Speech, 略してPOS(ピーオーエスと読まれることが多い?)。
    英語の形態素解析器は pos tagger で検索すると、多くの情報がヒットします。
 
+正規化
+------
+
+形態素解析を行うことで、文書を語(形態素)に分割することができましたが、現在の状態では、例えば「python」と「PYTHON」と「Python」や「woman」と「women」などの語が区別されています。
+
+しかしながら、一般的にこれらの単語は同じ物として扱いたいことが多いので、形態素解析を行った次は、語の正規化を行います。英単語の正規化は大きく分けて次の3ステップで行います。
+
+#. 大文字・小文字の統一
+      一般的に小文字に統一されることが多い
+
+      python, PYTHON, Python -> python
+
+#. ステミング(stemming)
+
+      与えられた語の語幹を取り出す
+
+      database, databases -> databas
+
+      initial, initialize, initialization -> initi
+
+#. 見出し語化/レンマ化(lemmatization)
+
+      与えられた語の、辞書における見出し語を求める
+
+      women -> woman
+
+      databases -> database
+
+
+
 Pythonでの使用法
 ----------------
 
