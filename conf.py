@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'information_retrieval'
+project = u'情報検索入門'
 copyright = u'2011, Yuku Takahashi'
 
 # The version info for the project you're documenting, acts as replacement for
