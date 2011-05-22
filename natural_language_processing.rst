@@ -391,6 +391,13 @@ Pythonでの使用法
 * `日本語ストップワード <http://svn.sourceforge.jp/svnroot/slothlib/CSharp/Version1/SlothLib/NLP/Filter/StopWord/word/Japanese.txt>`_
 * `英語ストップワード <http://svn.sourceforge.jp/svnroot/slothlib/CSharp/Version1/SlothLib/NLP/Filter/StopWord/word/English.txt>`_
 
+Term Frequency ベクトル
+-----------------------
+
+ストップワードを除去したことで、文書の特徴を表す単語を得ることができました。このようにして得られた文書を特徴付ける語の頻度を含めて表したものを **Term Frequency ベクトル** と言い、省略して単に **tf** とよく呼ばれます。
+
+tfは文書に出現する単語のみを考慮し、文書集合の中での語の出現頻度は考慮していません。例えば、ある文書Dに *python* という語が多く出現していたとします。この時、検索対象となる他の文書にほとんど *python* が出現しない場合、 *python* はこの文書集合の中でDを特徴付ける語であると言えます。一方、他の文書にも共通して *python* が現れている場合、Dを特徴付ける語とは言えません。このような背景から、tfをそのまま用いるのではなく、文書集合の中での語の出現頻度を考慮したtf/idfという手法がよく用いられます。tf/idfについては「文書の検索」の回で解説します。
+
 Pythonでの使用法
 ----------------
 
