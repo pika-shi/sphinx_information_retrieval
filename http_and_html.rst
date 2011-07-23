@@ -143,3 +143,54 @@ HTML
 
 PythonでのHTML解析
 ------------------
+
+.. blockdiag::
+
+   diagram {
+       A [label = "Document"];
+       B [label = "Element <html>"];
+       C [label = "Element <head>"];
+       D [label = "Element <body>"];
+       E [label = "Element <title>"];
+       F [label = "Element <p>"];
+       G [label = "Element <p>"];
+       H [label = "Element <b>"];
+       I [label = "Element <b>"];
+       J [label = 'Text "Page title"', color = pink];
+       K [label = 'Text "This is para..."', color = pink];
+       L [label = 'Text "one"', color = pink];
+       M [label = 'Text "."', color = pink];
+       N [label = 'Text "This is para..."', color = pink];
+       O [label = 'Text "Page title"', color = pink];
+       P [label = 'Text "Page title"', color = pink];
+       Q [label = 'Attribute id = "firstpara"', color = green];
+       R [label = 'Attribute id = "center"', color = green];
+       S [label = 'Attribute id = "second..."', color = green];
+       T [label = 'Attribute id = "blah"', color = green];
+
+       A -> B -> C, D;
+       C -> E -> J;
+       D -> F, G;
+       F -> Q, R, K, H, M;
+       H -> L;
+       G -> S, T, N, I, P;
+       I -> O;
+   }
+
+BeautifulSoupを用いたHTML解析
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+BeautifulSoupはPythonで記述された強力なHMLT/XML解析モジュールで、タグの検索や置換などを簡単に行うことができます。
+
+#. BeautifulSoupの使い方
+
+   BeautifulSoupモジュールにはHTML解析器のBeautifulSoupクラスが定義されています。コンストラクタはHTMLが記述された文字列を受け取ります。::
+
+      from BeautifulSoup import BeautifulSoup
+      soup = BeautifulSoup(html)
+
+   ここでは触れませんが、BeautifulSoupにはXML解析器のBeautifulStoneSoupクラスも定義されており、コンストラクタはXML文字列を受け取ります。::
+
+      from BeautifulSoup import BeautifulStoneSoup
+      stone_soup = BeautifulStoneSoup(xml)
+
