@@ -179,6 +179,7 @@ Pythonでの使用法
 .. seealso::
 
    Python公式ドキュメント
+      `正規表現HOWTO <http://www.python.jp/doc/nightly/howto/regex.html>`_
       `7.2. re - 正規表現操作 <http://www.python.jp/doc/nightly/library/re.html>`_
 
 #. マッチするものを全て列挙する場合、findallを使います。::
