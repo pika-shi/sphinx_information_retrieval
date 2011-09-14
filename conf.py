@@ -25,7 +25,8 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.todo', 'sphinx.ext.pngmath']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.todo', 'sphinx.ext.pngmath',
+              'sphinxcontrib.blockdiag']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -214,3 +215,6 @@ man_pages = [
     ('index', 'information_retrieval', u'information_retrieval Documentation',
      [u'Yuku Takahashi'], 1)
 ]
+
+# Fontpath for blockdiag
+#blockdiag_fontpath = '/usr/share/fonts/ricty/Ricty-Regular.ttf'
